@@ -57,7 +57,7 @@ class Cart extends \Magento\Payment\Model\Cart
     }
 
     /**
-     * Check the line items and totals according to PayPal business logic limitations
+     * Check the line items and totals according to PayFast business logic limitations
      *
      * @return void
      */
@@ -105,7 +105,7 @@ class Cart extends \Magento\Payment\Model\Cart
     }
 
     /**
-     * Import items from sales model with workarounds for PayPal
+     * Import items from sales model with workarounds for PayFast
      *
      * @return void
      */
