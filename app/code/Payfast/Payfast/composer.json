@@ -13,5 +13,13 @@
     "support":
     {
         "email": "developers@payfast.co.za"
+    },
+    "autoload": {
+        "files": [
+          "registration.php"
+        ],
+        "psr-4": {
+          "Payfast\\Payfast\\": ""
+        }
     }
 }

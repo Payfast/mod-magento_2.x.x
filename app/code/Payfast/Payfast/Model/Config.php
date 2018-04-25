@@ -21,6 +21,12 @@ class Config extends AbstractConfig
     /** @var \Payfast\Payfast\Model\Payfast this is a model which we will use. */
     const METHOD_CODE = 'payfast';
 
+    /** @var string should this module send confirmation email */
+    const KEY_SEND_CONFIRMATION_EMAIL = 'allowed_confirmation_email';
+
+    /** @var string should this module send invoice email */
+    const KEY_SEND_INVOICE_EMAIL = 'allowed_confirmation_email';
+
     /** Core data @var \Magento\Directory\Helper\Data */
     protected $directoryHelper;
 

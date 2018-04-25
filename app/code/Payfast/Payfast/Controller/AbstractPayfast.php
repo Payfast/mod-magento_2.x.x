@@ -9,8 +9,10 @@ namespace Payfast\Payfast\Controller;
 include_once( dirname( __FILE__ ) .'/../Model/payfast_common.inc' );
 
 use Payfast\Payfast\Model\Payfast;
-use Magento\Checkout\Controller\Express\RedirectLoginInterface;
 use Magento\Framework\App\Action\Action as AppAction;
+use Magento\Sales\Model\Order\Email\Sender\OrderSender;
+use Magento\Sales\Model\Order\Email\Sender\InvoiceSender;
+use Magento\Checkout\Controller\Express\RedirectLoginInterface;
 
 /**
  * Abstract Express Checkout Controller
@@ -68,7 +70,7 @@ abstract class AbstractPayfast extends AppAction implements RedirectLoginInterfa
     /**
      * @var \Magento\Framework\Session\Generic
      */
-    protected $payfastSession;
+    protected $_payfastSession;
 
     /**
      * @var \Magento\Framework\Url\Helper
@@ -89,7 +91,7 @@ abstract class AbstractPayfast extends AppAction implements RedirectLoginInterfa
     protected $_order;
 
     /** @var \Magento\Framework\View\Result\PageFactory  */
-    protected $pageFactory;
+    protected $_pageFactory;
 
     /**
      * @var \Magento\Framework\DB\TransactionFactory
@@ -110,6 +112,8 @@ abstract class AbstractPayfast extends AppAction implements RedirectLoginInterfa
      * @param \Magento\Customer\Model\Url $customerUrl
      * @param \Magento\Framework\DB\TransactionFactory $transactionFactory
      * @param \Payfast\Payfast\Model\Payfast $paymentMethod
+     * @param OrderSender $orderSender
+     * @param InvoiceSender $invoiceSender
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -122,7 +126,9 @@ abstract class AbstractPayfast extends AppAction implements RedirectLoginInterfa
         \Magento\Customer\Model\Url $customerUrl,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\DB\TransactionFactory $transactionFactory,
-        \Payfast\Payfast\Model\Payfast $paymentMethod
+        \Payfast\Payfast\Model\Payfast $paymentMethod,
+        OrderSender $orderSender,
+        InvoiceSender $invoiceSender
     )
     {
         $pre = __METHOD__ . " : ";
@@ -140,6 +146,8 @@ abstract class AbstractPayfast extends AppAction implements RedirectLoginInterfa
         $this->pageFactory = $pageFactory;
         $this->_transactionFactory = $transactionFactory;
         $this->_paymentMethod = $paymentMethod;
+        $this->_orderSender = $orderSender;
+        $this->_invoiceSender = $invoiceSender;
 
         parent::__construct( $context );
 

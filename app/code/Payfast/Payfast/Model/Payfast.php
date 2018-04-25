@@ -513,9 +513,10 @@ class Payfast extends \Magento\Payment\Model\Method\AbstractMethod
      */
     public function getPayfastHost( $serverMode )
     {
+
         if ( !in_array( $serverMode, [ 'live', 'test' ] ) )
         {
-            $pfHost = "www.payfast.{$serverMode}";
+            $pfHost = "payfast.{$serverMode}";
         }
         else
         {

@@ -7,6 +7,9 @@
 
 namespace Payfast\Payfast\Controller\Notify;
 
+use Magento\Framework\Exception\LocalizedException;
+use Payfast\Payfast\Model\Config AS PayFastConfig;
+
 class Index extends \Payfast\Payfast\Controller\AbstractPayfast
 {
     private $storeId;
@@ -126,8 +129,10 @@ class Index extends \Payfast\Payfast\Controller\AbstractPayfast
             if( $pfData['payment_status'] == "COMPLETE" )
             {
                 pflog( 'Order complete' );
-                
+                $this->_logger->debug($pre. 'canSendNewEmailFlag is ' . boolval($this->_order->getCanSendNewEmailFlag()));
+
                 // Update order additional payment information
+                /** @var  \Magento\Sales\Model\Order\Payment $payment  */
                 $payment = $this->_order->getPayment();
         		$payment->setAdditionalInformation( "payment_status", $pfData['payment_status'] );
         		$payment->setAdditionalInformation( "m_payment_id", $pfData['m_payment_id'] );
@@ -159,20 +164,44 @@ class Index extends \Payfast\Payfast\Controller\AbstractPayfast
 	protected function saveInvoice()
     {
         pflog( 'Saving invoice' );
-        
-		// Check for mail msg
-		$invoice = $this->_order->prepareInvoice();
 
-		$invoice->register()->capture();
+        try {
+            // Check for mail msgss
+            $invoice = $this->_order->prepareInvoice();
 
-        /** @var \Magento\Framework\DB\Transaction $transaction */
-        $transaction = $this->_transactionFactory->create();
-        $transaction->addObject($invoice)
-            ->addObject($invoice->getOrder())
-            ->save();
+            $invoice->register()->capture();
 
-        $this->_order->addStatusHistoryComment( __( 'Notified customer about invoice #%1.', $invoice->getIncrementId() ) );
-        $this->_order->setIsCustomerNotified(true);
-        $this->_order->save();
+            /** @var \Magento\Framework\DB\Transaction $transaction */
+            $transaction = $this->_transactionFactory->create();
+            $transaction->addObject($invoice)
+                ->addObject($invoice->getOrder())
+                ->save();
+
+            $this->_order->addStatusHistoryComment( __( 'Notified customer about invoice #%1.', $invoice->getIncrementId() ) );
+
+            $this->_order->save();
+
+            if ($this->_paymentMethod->getConfigData(PayFastConfig::KEY_SEND_CONFIRMATION_EMAIL)) {
+                pflog( 'before sending order email, canSendNewEmailFlag is ' . boolval($this->_order->getCanSendNewEmailFlag()));
+                $this->_orderSender->send($this->_order);
+                pflog('after sending order email');
+            }
+            
+            if ($this->_paymentMethod->getConfigData(PayFastConfig::KEY_SEND_INVOICE_EMAIL)) {
+                pflog( 'before sending invoice email is ' . boolval($this->_order->getCanSendNewEmailFlag()));
+                $this->_invoiceSender->send($invoice);
+                pflog( 'after sending ' . boolval($invoice->getIncrementId()));
+            }
+
+        } catch (LocalizedException $e) {
+            pflog(__METHOD__ . ' localizedException caught and will be re thrown. ');
+            pflog(__METHOD__ . $e->getMessage());
+            throw $e;
+        } catch (\Exception $e) {
+            pflog(__METHOD__ . 'Exception caught and will ber rethrown.');
+            pflog(__METHOD__ . $e->getMessage());
+            throw $e;
+        }
+
     }
 }
