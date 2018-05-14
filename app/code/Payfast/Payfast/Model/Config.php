@@ -54,23 +54,26 @@ class Config extends AbstractConfig
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Directory\Helper\Data $directoryHelper
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param array $params
+
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\View\Asset\Repository
+     * @param array $params
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Directory\Helper\Data $directoryHelper,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        $params = [],
         \Psr\Log\LoggerInterface $logger,
-        \Magento\Framework\View\Asset\Repository $assetRepo
+        \Magento\Framework\View\Asset\Repository $assetRepo,
+        \Magento\Framework\UrlInterface $urlBuilder,
+        $params = []
     ) {
         $this->_logger = $logger;
         parent::__construct($scopeConfig);
         $this->directoryHelper = $directoryHelper;
         $this->_storeManager = $storeManager;
         $this->_assetRepo = $assetRepo;
+        $this->_urlBuilder = $urlBuilder;
 
         if ($params) {
             $method = array_shift($params);
@@ -80,6 +83,21 @@ class Config extends AbstractConfig
                 $this->setStoreId($storeId);
             }
         }
+    }
+
+    /**
+     * Checkout redirect URL getter for onepage checkout (hardcode)
+     *
+     * @see \Magento\Checkout\Controller\Onepage::savePaymentAction()
+     * @see \Magento\Quote\Model\Quote\Payment::getCheckoutRedirectUrl()
+     * @return string
+     */
+    public function getCheckoutRedirectUrl()
+    {
+        $pre = __METHOD__ . " : ";
+        $this->_logger->debug( $pre . 'bof' );
+
+        return $this->_urlBuilder->getUrl( 'payfast/redirect' );
     }
 
     /**
@@ -193,16 +211,18 @@ class Config extends AbstractConfig
 
         $action = $this->getValue( 'paymentAction' );
 
+        $this->_logger->debug( $pre . 'payment action is : ' . $action );
+
         switch ( $action )
         {
             case self::PAYMENT_ACTION_AUTH:
-                $paymentAction = \Magento\Payment\Model\Method\AbstractMethod::ACTION_AUTHORIZE;
+                $paymentAction = self::ACTION_AUTHORIZE;
                 break;
             case self::PAYMENT_ACTION_SALE:
-                $paymentAction = \Magento\Payment\Model\Method\AbstractMethod::ACTION_AUTHORIZE_CAPTURE;
+                $paymentAction = self::ACTION_AUTHORIZE_CAPTURE;
                 break;
             case self::PAYMENT_ACTION_ORDER:
-                $paymentAction = \Magento\Payment\Model\Method\AbstractMethod::ACTION_ORDER;
+                $paymentAction = self::ACTION_ORDER;
                 break;
         }
 

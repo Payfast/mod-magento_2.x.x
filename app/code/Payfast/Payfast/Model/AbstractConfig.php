@@ -13,7 +13,7 @@ use Magento\Store\Model\ScopeInterface;
 /**
  * Class AbstractConfig
  */
-abstract class AbstractConfig implements ConfigInterface
+abstract class AbstractConfig extends \Magento\Payment\Gateway\Config\Config implements ConfigInterface
 {
     /**#@+
      * Payment actions
@@ -23,6 +23,13 @@ abstract class AbstractConfig implements ConfigInterface
     const PAYMENT_ACTION_AUTH = 'Authorization';
 
     const PAYMENT_ACTION_ORDER = 'Order';
+
+    const ACTION_ORDER = 'order';
+
+    const ACTION_AUTHORIZE = 'authorize';
+
+    const ACTION_AUTHORIZE_CAPTURE = 'authorize_capture';
+
     /**#@-*/
 
 
@@ -60,6 +67,7 @@ abstract class AbstractConfig implements ConfigInterface
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
     )
     {
+        parent::__construct($scopeConfig, self::getMethodCode());
         $this->_scopeConfig = $scopeConfig;
     }
 
@@ -68,6 +76,12 @@ abstract class AbstractConfig implements ConfigInterface
      */
     protected $methodInstance;
 
+    /**
+     * @return null|string
+     */
+    public function isActive(){
+        return $this->getValue('active');
+    }
     /**
      * Sets method instance used for retrieving method specific data
      *
@@ -241,15 +255,15 @@ abstract class AbstractConfig implements ConfigInterface
         {
             case Config::METHOD_CODE:
                 $isEnabled = $this->_scopeConfig->isSetFlag(
-                        'payment/' . Config::METHOD_CODE . '/active',
+                        'payment/' . $this->getMethodCode() . '/active',
                         ScopeInterface::SCOPE_STORE, $this->_storeId
                     ) ||
                     $this->_scopeConfig->isSetFlag(
-                        'payment/' . Config::METHOD_CODE . '/active',
+                        'payment/' . $this->getMethodCode() . '/active',
                         ScopeInterface::SCOPE_STORE,
                         $this->_storeId
                     );
-                $method = Config::METHOD_CODE;
+                $method = $this->getMethodCode();
                 break;
             default:
                 $isEnabled = $this->_scopeConfig->isSetFlag(

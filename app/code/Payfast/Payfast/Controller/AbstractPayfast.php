@@ -8,6 +8,7 @@ namespace Payfast\Payfast\Controller;
 
 include_once( dirname( __FILE__ ) .'/../Model/payfast_common.inc' );
 
+use Magento\Framework\App\ActionInterface;
 use Payfast\Payfast\Model\Payfast;
 use Magento\Framework\App\Action\Action as AppAction;
 use Magento\Sales\Model\Order\Email\Sender\OrderSender;
@@ -18,7 +19,7 @@ use Magento\Checkout\Controller\Express\RedirectLoginInterface;
  * Abstract Express Checkout Controller
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-abstract class AbstractPayfast extends AppAction implements RedirectLoginInterface
+abstract class AbstractPayfast extends AppAction implements RedirectLoginInterface, ActionInterface
 {
     /**
      * Internal cache of checkout models
@@ -190,8 +191,10 @@ abstract class AbstractPayfast extends AppAction implements RedirectLoginInterfa
 
         if ( !$this->_order->getId())
         {
+            $phrase = __( 'We could not find "Order" for processing' );
+            $this->_logger->critical($pre . $phrase);
             $this->getResponse()->setStatusHeader( 404, '1.1', 'Not found' );
-            throw new \Magento\Framework\Exception\LocalizedException( __( 'We could not find "Order" for processing' ) );
+            throw new \Magento\Framework\Exception\LocalizedException( $phrase );
         }
 
         if( $this->_order->getState() != \Magento\Sales\Model\Order::STATE_PENDING_PAYMENT)

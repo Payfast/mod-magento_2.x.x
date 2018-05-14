@@ -1,0 +1,234 @@
+2018-04-24 08:31:17 : Payfast\Payfast\Model\Payfast::getCheckoutRedirectUrl : bof
+2018-04-24 08:32:35 : Payfast\Payfast\Model\Payfast::getCheckoutRedirectUrl : bof
+2018-04-24 08:39:19 : Payfast\Payfast\Model\Payfast::getCheckoutRedirectUrl : bof
+2018-04-24 08:41:35 : Payfast\Payfast\Model\Payfast::getCheckoutRedirectUrl : bof
+2018-04-24 08:42:36 : Payfast\Payfast\Model\Payfast::getCheckoutRedirectUrl : bof
+2018-04-24 08:42:47 : Payfast\Payfast\Model\Payfast::initialize : bof
+2018-04-24 08:42:47 : Payfast\Payfast\Model\Payfast::getOrderPlaceRedirectUrl : bof
+2018-04-24 08:42:47 : Payfast\Payfast\Controller\Redirect\Index::execute : bof
+2018-04-24 08:42:47 : Payfast\Payfast\Model\Payfast::getStandardCheckoutFormFields : pfOutput for signature is : merchant_id=10000100&merchant_key=46f0cd694581a&return_url=https%3A%2F%2Fmagento.pf.lefu%2Fpayfast%2Fredirect%2Fsuccess%2F&cancel_url=https%3A%2F%2Fmagento.pf.lefu%2Fpayfast%2Fredirect%2Fcancel%2F&notify_url=https%3A%2F%2Fmagento.pf.lefu%2Fpayfast%2Fnotify%2F&name_first=Veronica&name_last=Costello&email_address=roni_cost%40example.com&m_payment_id=000000016&amount=141.65&item_name=Default+Store+View%2C+Order+%23000000016&passphrase=sandbox
+2018-04-24 08:42:48 : Payfast\Payfast\Model\Payfast::getStandardCheckoutFormFields : data is :Array
+(
+    [merchant_id] => 10000100
+    [merchant_key] => 46f0cd694581a
+    [return_url] => https://magento.pf.lefu/payfast/redirect/success/
+    [cancel_url] => https://magento.pf.lefu/payfast/redirect/cancel/
+    [notify_url] => https://magento.pf.lefu/payfast/notify/
+    [name_first] => Veronica
+    [name_last] => Costello
+    [email_address] => roni_cost@example.com
+    [m_payment_id] => 000000016
+    [amount] => 141.65
+    [item_name] => Default Store View, Order #000000016
+    [signature] => 87c68a8fcc6a737d54af59faa04c7929
+    [user_agent] => Magento 2.2.1
+)
+
+2018-04-25 08:03:33 : Payfast\Payfast\Model\Payfast::getCheckoutRedirectUrl : bof
+2018-04-25 08:03:55 : Payfast\Payfast\Model\Payfast::getCheckoutRedirectUrl : bof
+2018-04-25 08:04:12 : Payfast\Payfast\Model\Payfast::initialize : bof
+2018-04-25 08:04:12 : Payfast\Payfast\Model\Payfast::getOrderPlaceRedirectUrl : bof
+2018-04-25 08:04:13 : Payfast\Payfast\Controller\Redirect\Index::execute : bof
+2018-04-25 08:04:13 : Payfast\Payfast\Model\Payfast::getStandardCheckoutFormFields : pfOutput for signature is : merchant_id=10000100&merchant_key=46f0cd694581a&return_url=https%3A%2F%2Fmagento.pf.lefu%2Fpayfast%2Fredirect%2Fsuccess%2F&cancel_url=https%3A%2F%2Fmagento.pf.lefu%2Fpayfast%2Fredirect%2Fcancel%2F&notify_url=https%3A%2F%2Fmagento.pf.lefu%2Fpayfast%2Fnotify%2F&name_first=Veronica&name_last=Costello&email_address=roni_cost%40example.com&m_payment_id=000000017&amount=72.79&item_name=Default+Store+View%2C+Order+%23000000017&passphrase=sandbox
+2018-04-25 08:04:13 : Payfast\Payfast\Model\Payfast::getStandardCheckoutFormFields : data is :Array
+(
+    [merchant_id] => 10000100
+    [merchant_key] => 46f0cd694581a
+    [return_url] => https://magento.pf.lefu/payfast/redirect/success/
+    [cancel_url] => https://magento.pf.lefu/payfast/redirect/cancel/
+    [notify_url] => https://magento.pf.lefu/payfast/notify/
+    [name_first] => Veronica
+    [name_last] => Costello
+    [email_address] => roni_cost@example.com
+    [m_payment_id] => 000000017
+    [amount] => 72.79
+    [item_name] => Default Store View, Order #000000017
+    [signature] => 918aff9485e537e1f7aea39d2b72ff45
+    [user_agent] => Magento 2.2.1
+)
+
+2018-04-25 08:04:57 :  PayFast ITN call received
+2018-04-25 08:04:57 : Server = payfast.local
+2018-04-25 08:04:57 : Verify security signature
+2018-04-25 08:04:57 : Signature = invalid
+2018-04-25 08:04:57 : Error occurred: Security signature mismatch
+2018-04-25 08:09:03 : Payfast\Payfast\Model\Payfast::getCheckoutRedirectUrl : bof
+2018-04-25 08:09:24 : Payfast\Payfast\Model\Payfast::getCheckoutRedirectUrl : bof
+2018-04-25 08:13:02 : Payfast\Payfast\Model\Payfast::initialize : bof
+2018-04-25 08:13:03 : Payfast\Payfast\Model\Payfast::getOrderPlaceRedirectUrl : bof
+2018-04-25 08:13:03 : Payfast\Payfast\Controller\Redirect\Index::execute : bof
+2018-04-25 08:13:03 : Payfast\Payfast\Model\Payfast::getStandardCheckoutFormFields : pfOutput for signature is : merchant_id=10000100&merchant_key=46f0cd694581a&return_url=https%3A%2F%2Fmagento.pf.lefu%2Fpayfast%2Fredirect%2Fsuccess%2F&cancel_url=https%3A%2F%2Fmagento.pf.lefu%2Fpayfast%2Fredirect%2Fcancel%2F&notify_url=https%3A%2F%2Fmagento.pf.lefu%2Fpayfast%2Fnotify%2F&name_first=Veronica&name_last=Costello&email_address=roni_cost%40example.com&m_payment_id=000000018&amount=72.79&item_name=Default+Store+View%2C+Order+%23000000018&passphrase=sandbox
+2018-04-25 08:13:03 : Payfast\Payfast\Model\Payfast::getStandardCheckoutFormFields : data is :Array
+(
+    [merchant_id] => 10000100
+    [merchant_key] => 46f0cd694581a
+    [return_url] => https://magento.pf.lefu/payfast/redirect/success/
+    [cancel_url] => https://magento.pf.lefu/payfast/redirect/cancel/
+    [notify_url] => https://magento.pf.lefu/payfast/notify/
+    [name_first] => Veronica
+    [name_last] => Costello
+    [email_address] => roni_cost@example.com
+    [m_payment_id] => 000000018
+    [amount] => 72.79
+    [item_name] => Default Store View, Order #000000018
+    [signature] => 5b04617b9c312c6ef3a63af571975018
+    [user_agent] => Magento 2.2.1
+)
+
+2018-04-25 08:13:12 :  PayFast ITN call received
+2018-04-25 08:13:12 : Server = payfast.local
+2018-04-25 08:13:12 : Verify security signature
+2018-04-25 08:13:12 : func_get_args : [{"m_payment_id":"000000018","pf_payment_id":"77163","payment_status":"COMPLETE","item_name":"Default Store View, Order #000000018","item_description":"","amount_gross":"72.79","amount_fee":"-5.31","amount_net":"67.48","custom_str1":"","custom_str2":"","custom_str3":"","custom_str4":"","custom_str5":"","custom_int1":"","custom_int2":"","custom_int3":"","custom_int4":"","custom_int5":"","name_first":"Veronica","name_last":"Costello","email_address":"roni_cost@example.com","merchant_id":"10000100","signature":"0b01fa72a9237230ad53ef48423e634a"},"","sandbox","local"]
+2018-04-25 08:13:12 : Signature = valid
+2018-04-25 08:13:12 : Check order hasn't been processed
+2018-04-25 08:13:12 : order status is : pending_payment
+2018-04-25 08:13:12 : Verify data received
+2018-04-25 08:13:12 : Host = payfast.local
+2018-04-25 08:13:12 : Params = m_payment_id=000000018&pf_payment_id=77163&payment_status=COMPLETE&item_name=Default+Store+View%2C+Order+%23000000018&item_description=&amount_gross=72.79&amount_fee=-5.31&amount_net=67.48&custom_str1=&custom_str2=&custom_str3=&custom_str4=&custom_str5=&custom_int1=&custom_int2=&custom_int3=&custom_int4=&custom_int5=&name_first=Veronica&name_last=Costello&email_address=roni_cost%40example.com&merchant_id=10000100
+2018-04-25 08:13:12 : Response:
+VALID
+2018-04-25 08:13:12 : Check status and update order
+2018-04-25 08:13:12 : Order complete
+2018-04-25 08:13:13 : Saving invoice
+2018-04-25 08:13:13 : before sending order email, canSendNewEmailFlag is 1
+2018-04-25 08:13:13 : Payfast\Payfast\Controller\Notify\Index::saveInvoiceException caught and will ber rethrown.
+2018-04-25 08:13:13 : Payfast\Payfast\Controller\Notify\Index::saveInvoiceNotice: Undefined property: Payfast\Payfast\Controller\Notify\Index\Interceptor::$orderSender in /data/vendor/payfast/payfast/Controller/Notify/Index.php on line 194
+2018-04-25 08:25:35 : Payfast\Payfast\Model\Payfast::getCheckoutRedirectUrl : bof
+2018-04-25 08:26:09 : Payfast\Payfast\Model\Payfast::getCheckoutRedirectUrl : bof
+2018-04-25 08:27:58 : Payfast\Payfast\Model\Payfast::initialize : bof
+2018-04-25 08:27:59 : Payfast\Payfast\Model\Payfast::getOrderPlaceRedirectUrl : bof
+2018-04-25 08:28:00 : Payfast\Payfast\Controller\Redirect\Index::execute : bof
+2018-04-25 08:28:00 : Payfast\Payfast\Model\Payfast::getStandardCheckoutFormFields : pfOutput for signature is : merchant_id=10000100&merchant_key=46f0cd694581a&return_url=https%3A%2F%2Fmagento.pf.lefu%2Fpayfast%2Fredirect%2Fsuccess%2F&cancel_url=https%3A%2F%2Fmagento.pf.lefu%2Fpayfast%2Fredirect%2Fcancel%2F&notify_url=https%3A%2F%2Fmagento.pf.lefu%2Fpayfast%2Fnotify%2F&name_first=Veronica&name_last=Costello&email_address=roni_cost%40example.com&m_payment_id=000000019&amount=72.79&item_name=Default+Store+View%2C+Order+%23000000019&passphrase=sandbox
+2018-04-25 08:28:02 : Payfast\Payfast\Model\Payfast::getStandardCheckoutFormFields : data is :Array
+(
+    [merchant_id] => 10000100
+    [merchant_key] => 46f0cd694581a
+    [return_url] => https://magento.pf.lefu/payfast/redirect/success/
+    [cancel_url] => https://magento.pf.lefu/payfast/redirect/cancel/
+    [notify_url] => https://magento.pf.lefu/payfast/notify/
+    [name_first] => Veronica
+    [name_last] => Costello
+    [email_address] => roni_cost@example.com
+    [m_payment_id] => 000000019
+    [amount] => 72.79
+    [item_name] => Default Store View, Order #000000019
+    [signature] => eec1e6676762cea5a6c40960a238b2a4
+    [user_agent] => Magento 2.2.1
+)
+
+2018-04-25 08:28:15 :  PayFast ITN call received
+2018-04-25 08:28:15 : Server = payfast.local
+2018-04-25 08:28:15 : Verify security signature
+2018-04-25 08:28:15 : func_get_args : [{"m_payment_id":"000000019","pf_payment_id":"77164","payment_status":"COMPLETE","item_name":"Default Store View, Order #000000019","item_description":"","amount_gross":"72.79","amount_fee":"-5.31","amount_net":"67.48","custom_str1":"","custom_str2":"","custom_str3":"","custom_str4":"","custom_str5":"","custom_int1":"","custom_int2":"","custom_int3":"","custom_int4":"","custom_int5":"","name_first":"Veronica","name_last":"Costello","email_address":"roni_cost@example.com","merchant_id":"10000100","signature":"0b906e4ba34153f699533b6f39abd5db"},"","sandbox","local"]
+2018-04-25 08:28:15 : Signature = valid
+2018-04-25 08:28:15 : Check order hasn't been processed
+2018-04-25 08:28:15 : order status is : pending_payment
+2018-04-25 08:28:15 : Verify data received
+2018-04-25 08:28:15 : Host = payfast.local
+2018-04-25 08:28:15 : Params = m_payment_id=000000019&pf_payment_id=77164&payment_status=COMPLETE&item_name=Default+Store+View%2C+Order+%23000000019&item_description=&amount_gross=72.79&amount_fee=-5.31&amount_net=67.48&custom_str1=&custom_str2=&custom_str3=&custom_str4=&custom_str5=&custom_int1=&custom_int2=&custom_int3=&custom_int4=&custom_int5=&name_first=Veronica&name_last=Costello&email_address=roni_cost%40example.com&merchant_id=10000100
+2018-04-25 08:28:15 : Response:
+VALID
+2018-04-25 08:28:15 : Check status and update order
+2018-04-25 08:28:15 : Order complete
+2018-04-25 08:28:15 : Saving invoice
+2018-04-25 08:28:15 : before sending order email, canSendNewEmailFlag is 1
+2018-04-25 08:28:19 : before sending order email, canSendNewEmailFlag is 1
+2018-04-25 09:54:19 : Payfast\Payfast\Model\Payfast::getCheckoutRedirectUrl : bof
+2018-04-25 09:55:04 : Payfast\Payfast\Model\Payfast::getCheckoutRedirectUrl : bof
+2018-04-25 09:55:16 : Payfast\Payfast\Model\Payfast::initialize : bof
+2018-04-25 09:55:16 : Payfast\Payfast\Model\Payfast::getOrderPlaceRedirectUrl : bof
+2018-04-25 09:55:17 : Payfast\Payfast\Controller\Redirect\Index::execute : bof
+2018-04-25 09:55:17 : Payfast\Payfast\Model\Payfast::getStandardCheckoutFormFields : pfOutput for signature is : merchant_id=10000100&merchant_key=46f0cd694581a&return_url=https%3A%2F%2Fmagento.pf.lefu%2Fpayfast%2Fredirect%2Fsuccess%2F&cancel_url=https%3A%2F%2Fmagento.pf.lefu%2Fpayfast%2Fredirect%2Fcancel%2F&notify_url=https%3A%2F%2Fmagento.pf.lefu%2Fpayfast%2Fnotify%2F&name_first=Veronica&name_last=Costello&email_address=roni_cost%40example.com&m_payment_id=000000020&amount=72.79&item_name=Default+Store+View%2C+Order+%23000000020&passphrase=sandbox
+2018-04-25 09:55:17 : Payfast\Payfast\Model\Payfast::getStandardCheckoutFormFields : data is :Array
+(
+    [merchant_id] => 10000100
+    [merchant_key] => 46f0cd694581a
+    [return_url] => https://magento.pf.lefu/payfast/redirect/success/
+    [cancel_url] => https://magento.pf.lefu/payfast/redirect/cancel/
+    [notify_url] => https://magento.pf.lefu/payfast/notify/
+    [name_first] => Veronica
+    [name_last] => Costello
+    [email_address] => roni_cost@example.com
+    [m_payment_id] => 000000020
+    [amount] => 72.79
+    [item_name] => Default Store View, Order #000000020
+    [signature] => 7ebdccc992af3326122bc00a95f8bfa6
+    [user_agent] => Magento 2.2.1
+)
+
+2018-04-25 09:55:28 :  PayFast ITN call received
+2018-04-25 09:55:28 : Server = payfast.local
+2018-04-25 09:55:28 : Verify security signature
+2018-04-25 09:55:28 : Signature = valid
+2018-04-25 09:55:28 : Check order hasn't been processed
+2018-04-25 09:55:28 : order status is : pending_payment
+2018-04-25 09:55:28 : Verify data received
+2018-04-25 09:55:28 : Host = payfast.local
+2018-04-25 09:55:28 : Params = m_payment_id=000000020&pf_payment_id=77165&payment_status=COMPLETE&item_name=Default+Store+View%2C+Order+%23000000020&item_description=&amount_gross=72.79&amount_fee=-5.31&amount_net=67.48&custom_str1=&custom_str2=&custom_str3=&custom_str4=&custom_str5=&custom_int1=&custom_int2=&custom_int3=&custom_int4=&custom_int5=&name_first=Veronica&name_last=Costello&email_address=roni_cost%40example.com&merchant_id=10000100
+2018-04-25 09:55:28 : Response:
+VALID
+2018-04-25 09:55:28 : Check status and update order
+2018-04-25 09:55:28 : Order complete
+2018-04-25 09:55:28 : Saving invoice
+2018-04-25 09:55:28 : before sending order email, canSendNewEmailFlag is 1
+2018-04-25 09:55:32 : after sending order email
+2018-04-25 09:55:32 : before sending invoice email is 1
+2018-04-25 09:55:36 : after sending 1
+2018-04-26 14:29:59 : Payfast\Payfast\Model\Payfast::getCheckoutRedirectUrl : bof
+2018-05-14 13:03:26 : Payfast\Payfast\Controller\Redirect\Index::execute : bof
+2018-05-14 13:03:26 : Payfast\Payfast\Model\Payfast::getStandardCheckoutFormFields : pfOutput for signature is : merchant_id=10000100&merchant_key=46f0cd694581a&return_url=https%3A%2F%2Fmagento.pf.lefu%2Fpayfast%2Fredirect%2Fsuccess%2F&cancel_url=https%3A%2F%2Fmagento.pf.lefu%2Fpayfast%2Fredirect%2Fcancel%2F&notify_url=https%3A%2F%2Fmagento.pf.lefu%2Fpayfast%2Fnotify%2F&amount=0.00&item_name=Default+Store+View%2C+Order+%23&passphrase=sandbox
+2018-05-14 13:03:27 : Payfast\Payfast\Model\Payfast::getStandardCheckoutFormFields : data is :Array
+(
+    [merchant_id] => 10000100
+    [merchant_key] => 46f0cd694581a
+    [return_url] => https://magento.pf.lefu/payfast/redirect/success/
+    [cancel_url] => https://magento.pf.lefu/payfast/redirect/cancel/
+    [notify_url] => https://magento.pf.lefu/payfast/notify/
+    [name_first] => 
+    [name_last] => 
+    [email_address] => 
+    [m_payment_id] => 
+    [amount] => 0.00
+    [item_name] => Default Store View, Order #
+    [signature] => 98784fc394a7e6fbf9f9c851d35db70c
+    [user_agent] => Magento 2.2.1
+)
+
+2018-05-14 13:07:01 : Payfast\Payfast\Controller\Redirect\Index::execute : bof
+2018-05-14 13:07:01 : Payfast\Payfast\Model\Payfast::getStandardCheckoutFormFields : pfOutput for signature is : merchant_id=10000100&merchant_key=46f0cd694581a&return_url=https%3A%2F%2Fmagento.pf.lefu%2Fpayfast%2Fredirect%2Fsuccess%2F&cancel_url=https%3A%2F%2Fmagento.pf.lefu%2Fpayfast%2Fredirect%2Fcancel%2F&notify_url=https%3A%2F%2Fmagento.pf.lefu%2Fpayfast%2Fnotify%2F&amount=0.00&item_name=Default+Store+View%2C+Order+%23&passphrase=sandbox
+2018-05-14 13:07:02 : Payfast\Payfast\Model\Payfast::getStandardCheckoutFormFields : data is :Array
+(
+    [merchant_id] => 10000100
+    [merchant_key] => 46f0cd694581a
+    [return_url] => https://magento.pf.lefu/payfast/redirect/success/
+    [cancel_url] => https://magento.pf.lefu/payfast/redirect/cancel/
+    [notify_url] => https://magento.pf.lefu/payfast/notify/
+    [name_first] => 
+    [name_last] => 
+    [email_address] => 
+    [m_payment_id] => 
+    [amount] => 0.00
+    [item_name] => Default Store View, Order #
+    [signature] => 98784fc394a7e6fbf9f9c851d35db70c
+    [user_agent] => Magento 2.2.1
+)
+
+2018-05-14 13:34:42 : Payfast\Payfast\Controller\Redirect\Index::execute : bof
+2018-05-14 13:34:42 : Payfast\Payfast\Model\Payfast::getStandardCheckoutFormFields : pfOutput for signature is : merchant_id=10000100&merchant_key=46f0cd694581a&return_url=https%3A%2F%2Fmagento.pf.lefu%2Fpayfast%2Fredirect%2Fsuccess%2F&cancel_url=https%3A%2F%2Fmagento.pf.lefu%2Fpayfast%2Fredirect%2Fcancel%2F&notify_url=https%3A%2F%2Fmagento.pf.lefu%2Fpayfast%2Fnotify%2F&amount=0.00&item_name=Default+Store+View%2C+Order+%23&passphrase=sandbox
+2018-05-14 13:34:42 : Payfast\Payfast\Model\Payfast::getStandardCheckoutFormFields : data is :Array
+(
+    [merchant_id] => 10000100
+    [merchant_key] => 46f0cd694581a
+    [return_url] => https://magento.pf.lefu/payfast/redirect/success/
+    [cancel_url] => https://magento.pf.lefu/payfast/redirect/cancel/
+    [notify_url] => https://magento.pf.lefu/payfast/notify/
+    [name_first] => 
+    [name_last] => 
+    [email_address] => 
+    [m_payment_id] => 
+    [amount] => 0.00
+    [item_name] => Default Store View, Order #
+    [signature] => 98784fc394a7e6fbf9f9c851d35db70c
+    [user_agent] => Magento 2.2.1
+)
+

@@ -107,6 +107,8 @@ class PayfastConfigProvider implements ConfigProviderInterface
                 $config['payment']['payfast']['redirectUrl'][$code] = $this->getMethodRedirectUrl($code);
                 $config['payment']['payfast']['billingAgreementCode'][$code] = $this->getBillingAgreementCode($code);
 
+                $config['payment']['payfast']['isActive'][$code] = $this->config->isActive();
+
             }
         }
         $this->_logger->debug($pre . 'eof', $config);
@@ -123,8 +125,9 @@ class PayfastConfigProvider implements ConfigProviderInterface
     {
         $pre = __METHOD__ . ' : ';
         $this->_logger->debug($pre . 'bof');
+        $this->_logger->debug("code is : {$code}");
 
-        $methodUrl = $this->methods[$code]->getCheckoutRedirectUrl();
+        $methodUrl = $this->config->getCheckoutRedirectUrl();
 
         $this->_logger->debug($pre . 'eof');
         return $methodUrl;
@@ -143,6 +146,7 @@ class PayfastConfigProvider implements ConfigProviderInterface
         $this->_logger->debug($pre . 'bof');
 
         $customerId = $this->currentCustomer->getCustomerId();
+
         $this->config->setMethod($code);
 
         $this->_logger->debug($pre . 'eof');
