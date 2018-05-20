@@ -42,5 +42,6 @@ class ItnHandler implements \Magento\Payment\Gateway\Response\HandlerInterface
           $payment->setTransactionId($response[self::TXN_ID]);
           $payment->setIsTransactionClosed(false);
 
+
     }
 }

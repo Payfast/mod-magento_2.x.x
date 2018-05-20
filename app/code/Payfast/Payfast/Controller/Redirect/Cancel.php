@@ -33,7 +33,7 @@ class Cancel extends \Payfast\Payfast\Controller\AbstractPayfast
             // Get the user session
             $this->_order = $this->_checkoutSession->getLastRealOrder();
 
-            $this->messageManager->addNotice('You have successfully canceled the order using PayFast Checkout.');
+            $this->messageManager->addNoticeMessage('You have successfully canceled the order using PayFast Checkout.');
 
             if ($this->_order->getId() && $this->_order->getState() != \Magento\Sales\Model\Order::STATE_CANCELED)
             {

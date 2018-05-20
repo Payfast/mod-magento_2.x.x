@@ -79,9 +79,9 @@ abstract class AbstractPayfast extends AppAction implements RedirectLoginInterfa
     protected $_urlHelper;
 
     /**
-     * @var \Magento\Customer\Model\Url
+     * @var \Magento\Sales\Model\ResourceModel\Order $orderResourceModel
      */
-    protected $_customerUrl;
+    protected $orderResourceModel;
 
     /**
      * @var \Psr\Log\LoggerInterface
@@ -110,7 +110,8 @@ abstract class AbstractPayfast extends AppAction implements RedirectLoginInterfa
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Framework\Session\Generic $payfastSession
      * @param \Magento\Framework\Url\Helper\Data $urlHelper
-     * @param \Magento\Customer\Model\Url $customerUrl
+     * @param \Magento\Sales\Model\ResourceModel\Order $orderResourceModel
+     * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\DB\TransactionFactory $transactionFactory
      * @param \Payfast\Payfast\Model\Payfast $paymentMethod
      * @param OrderSender $orderSender
@@ -124,7 +125,7 @@ abstract class AbstractPayfast extends AppAction implements RedirectLoginInterfa
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Framework\Session\Generic $payfastSession,
         \Magento\Framework\Url\Helper\Data $urlHelper,
-        \Magento\Customer\Model\Url $customerUrl,
+        \Magento\Sales\Model\ResourceModel\Order $orderResourceModel,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\DB\TransactionFactory $transactionFactory,
         \Payfast\Payfast\Model\Payfast $paymentMethod,
@@ -143,7 +144,7 @@ abstract class AbstractPayfast extends AppAction implements RedirectLoginInterfa
         $this->_orderFactory = $orderFactory;
         $this->payfastSession = $payfastSession;
         $this->_urlHelper = $urlHelper;
-        $this->_customerUrl = $customerUrl;
+        $this->orderResourceModel = $orderResourceModel;
         $this->pageFactory = $pageFactory;
         $this->_transactionFactory = $transactionFactory;
         $this->_paymentMethod = $paymentMethod;
@@ -187,21 +188,28 @@ abstract class AbstractPayfast extends AppAction implements RedirectLoginInterfa
 
         $pre = __METHOD__ . " : ";
         $this->_logger->debug($pre . 'bof');
+
+        $this->_checkoutSession->loadCustomerQuote();
+
         $this->_order = $this->_checkoutSession->getLastRealOrder();
 
         if ( !$this->_order->getId())
         {
             $phrase = __( 'We could not find "Order" for processing' );
             $this->_logger->critical($pre . $phrase);
+
             $this->getResponse()->setStatusHeader( 404, '1.1', 'Not found' );
             throw new \Magento\Framework\Exception\LocalizedException( $phrase );
         }
 
         if( $this->_order->getState() != \Magento\Sales\Model\Order::STATE_PENDING_PAYMENT)
         {
-            $this->_order->setState(
-                \Magento\Sales\Model\Order::STATE_PENDING_PAYMENT
-            )->save();
+            $this->_logger->debug($pre . 'updating order state and status');
+
+            $this->_order->setStatus(\Magento\Sales\Model\Order::STATE_PENDING_PAYMENT);
+            $this->_order->setState(\Magento\Sales\Model\Order::STATE_PENDING_PAYMENT);
+
+            $this->orderResourceModel->save($this->_order);
         }
 
         if ( $this->_order->getQuoteId() )
@@ -277,7 +285,7 @@ abstract class AbstractPayfast extends AppAction implements RedirectLoginInterfa
      */
     public function getLoginUrl()
     {
-        return $this->_customerUrl->getLoginUrl();
+        return $this->orderResourceModel->getLoginUrl();
     }
 
     /**
@@ -299,7 +307,7 @@ abstract class AbstractPayfast extends AppAction implements RedirectLoginInterfa
         $this->_actionFlag->set( '', 'no-dispatch', true );
         $this->_customerSession->setBeforeAuthUrl( $this->_redirect->getRefererUrl() );
         $this->getResponse()->setRedirect(
-            $this->_urlHelper->addRequestParam( $this->_customerUrl->getLoginUrl(), [ 'context' => 'checkout' ] )
+            $this->_urlHelper->addRequestParam( $this->orderResourceModel->getLoginUrl(), [ 'context' => 'checkout' ] )
         );
     }
 

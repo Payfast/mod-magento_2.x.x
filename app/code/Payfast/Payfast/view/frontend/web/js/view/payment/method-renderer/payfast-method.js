@@ -12,7 +12,9 @@ define(
         'Magento_Customer/js/model/customer',
         'Magento_Checkout/js/checkout-data',
         'Magento_Checkout/js/model/payment/additional-validators',
-        'mage/url'
+        'mage/url',
+        'Magento_Checkout/js/model/quote',
+        'Magento_Ui/js/view/messages'
     ],
     function ($,
               Component,
@@ -21,7 +23,8 @@ define(
               customer,
               checkoutData,
               additionalValidators,
-              url)  {
+              url,
+              quote,)  {
         'use strict';
 
         return Component.extend({
@@ -43,6 +46,7 @@ define(
             isAvailable: function() {
                 return quote.totals().grand_total <= 0;
             },
+
             afterPlaceOrder: function () {
                 window.location.replace( url.build(window.checkoutConfig.payment.payfast.redirectUrl.payfast) );
             },
@@ -53,8 +57,7 @@ define(
             /** Returns payment acceptance mark image path */
             getPaymentAcceptanceMarkSrc: function() {
                 return window.checkoutConfig.payment.payfast.paymentAcceptanceMarkSrc;
-            }
-
+            },
         });
     }
 );

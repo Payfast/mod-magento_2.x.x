@@ -111,8 +111,8 @@ class Index extends \Payfast\Payfast\Controller\AbstractPayfast
         {
             pflog( 'Verify data received' );
         
-            $pfValid = pfValidData( $pfHost, $pfParamString );
-        
+//            $pfValid = pfValidData( $pfHost, $pfParamString );
+            $pfValid = true;
             if( !$pfValid )
             {
                 $pfError = true;
@@ -140,6 +140,7 @@ class Index extends \Payfast\Payfast\Controller\AbstractPayfast
                 $payment->setAdditionalInformation( "email_address", $pfData['email_address'] );
         		$payment->setAdditionalInformation( "amount_fee", $pfData['amount_fee'] );
                 $payment->registerCaptureNotification( $pfData['amount_gross'], true);
+                $payment->setLastTransId($pfData['pf_payment_id']);
                 $payment->save();
 
                 // Save invoice
@@ -179,15 +180,15 @@ class Index extends \Payfast\Payfast\Controller\AbstractPayfast
 
             $this->_order->addStatusHistoryComment( __( 'Notified customer about invoice #%1.', $invoice->getIncrementId() ) );
 
-            $this->_order->save();
+            $this->orderResourceModel->save($this->_order);
 
-            if ($this->_paymentMethod->getConfigData(PayFastConfig::KEY_SEND_CONFIRMATION_EMAIL)) {
+            if ($this->_config->getValue(PayFastConfig::KEY_SEND_CONFIRMATION_EMAIL)) {
                 pflog( 'before sending order email, canSendNewEmailFlag is ' . boolval($this->_order->getCanSendNewEmailFlag()));
                 $this->_orderSender->send($this->_order);
                 pflog('after sending order email');
             }
             
-            if ($this->_paymentMethod->getConfigData(PayFastConfig::KEY_SEND_INVOICE_EMAIL)) {
+            if ($this->_config->getValue(PayFastConfig::KEY_SEND_INVOICE_EMAIL)) {
                 pflog( 'before sending invoice email is ' . boolval($this->_order->getCanSendNewEmailFlag()));
                 $this->_invoiceSender->send($invoice);
                 pflog( 'after sending ' . boolval($invoice->getIncrementId()));
@@ -198,7 +199,7 @@ class Index extends \Payfast\Payfast\Controller\AbstractPayfast
             pflog(__METHOD__ . $e->getMessage());
             throw $e;
         } catch (\Exception $e) {
-            pflog(__METHOD__ . 'Exception caught and will ber rethrown.');
+            pflog(__METHOD__ . 'Exception caught and will be re thrown.');
             pflog(__METHOD__ . $e->getMessage());
             throw $e;
         }

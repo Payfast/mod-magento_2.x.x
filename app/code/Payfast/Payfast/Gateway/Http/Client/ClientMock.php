@@ -38,9 +38,6 @@ class ClientMock implements ClientInterface
 
     public function placeRequest(\Magento\Payment\Gateway\Http\TransferInterface $transferObject)
     {
-        $pre = __METHOD__ . ' : ';
-        $this->logger->debug($pre . 'bof');
-        $this->logger->debug($pre . 'bof' . print_r($transferObject, true));
 
         // TODO: Implement placeRequest() method.
         $response = $this->generateResponseForCode(
@@ -51,15 +48,78 @@ class ClientMock implements ClientInterface
 
         $this->logger->debug(
             [
+                'method' => __METHOD__,
                 'request' => $transferObject->getBody(),
                 'response' => $response
             ]
         );
 
-        $this->logger->debug($pre . 'bof');
-
         return $response;
 
     }
 
+    /**
+     * Returns result code
+     * will always return false for now since PayFast needs to do a redirect.
+     *
+     * @param TransferInterface $transfer
+     * @return int
+     */
+    private function getResultCode(TransferInterface $transfer)
+    {
+        $headers = $transfer->getHeaders();
+
+        if (isset($headers['force_result'])) {
+            return (int)$headers['force_result'];
+        }
+
+        return self::SUCCESS;
+    }
+
+    /**
+     * Generates response
+     *
+     * @return array
+     */
+    protected function generateResponseForCode($resultCode)
+    {
+
+        return array_merge(
+            [
+                'RESULT_CODE' => $resultCode,
+                'TXN_ID' => $this->generateTxnId()
+            ],
+            $this->getFieldsBasedOnResponseType($resultCode)
+        );
+    }
+
+
+    /**
+     * @return string
+     */
+    protected function generateTxnId()
+    {
+        return md5(mt_rand(0, 1000));
+    }
+
+    /**
+     * Returns response fields for result code
+     *
+     * @param int $resultCode
+     * @return array
+     */
+    private function getFieldsBasedOnResponseType($resultCode)
+    {
+        switch ($resultCode) {
+            case self::FAILURE:
+                return [
+                    'FRAUD_MSG_LIST' => [
+                        'Stolen card',
+                        'Customer location differs'
+                    ]
+                ];
+        }
+
+        return [];
+    }
 }

@@ -6,9 +6,31 @@ namespace Payfast\Payfast\Gateway\Validator;
 
 use Magento\Payment\Gateway\Validator\AbstractValidator;
 use Magento\Payment\Gateway\Validator\ResultInterface;
+use Magento\Payment\Gateway\Validator\ResultInterfaceFactory;
+use Payfast\Payfast\Gateway\Http\Client\ClientMock;
+use Psr\Log\LoggerInterface;
 
 class ResponseCodeValidator extends AbstractValidator
 {
+    const RESULT_CODE = 'RESULT_CODE';
+
+    /** @var LoggerInterface */
+    private $logger;
+
+    /**
+     * @param LoggerInterface $logger
+     * @param ResultInterfaceFactory $resultFactory
+     */
+    public function __construct(
+        ResultInterfaceFactory $resultFactory,
+        LoggerInterface $logger
+    ) {
+
+        parent::__construct($resultFactory);
+
+        $this->logger = $logger;
+    }
+
 
     /**
      * Performs domain-related validation for business object
@@ -29,8 +51,28 @@ class ResponseCodeValidator extends AbstractValidator
         $response = $validationSubject['response'];
         
         $this->logger->debug($pre . 'response has : '. print_r($response, true));
-        
-        
-        // TODO: Implement validate() method.
+
+        if ($this->isSuccessfulTransaction($response)) {
+            return $this->createResult(
+                true,
+                [__('Gateway will now call PayFast via redirect method.')]
+            );
+        } else {
+            return $this->createResult(
+                false,
+                [__('Gateway is not called just yet, we will now call PayFast via redirect.')]
+            );
+        }
+
+    }
+
+    /**
+     * @param array $response
+     * @return bool
+     */
+    private function isSuccessfulTransaction(array $response)
+    {
+        return isset($response[self::RESULT_CODE])
+            && $response[self::RESULT_CODE] !== ClientMock::FAILURE;
     }
 }

@@ -99,6 +99,28 @@ class Config extends AbstractConfig
 
         return $this->_urlBuilder->getUrl( 'payfast/redirect' );
     }
+    /**
+     * getPaidSuccessUrl
+     */
+    public function getPaidSuccessUrl()
+    {
+        return $this->_urlBuilder->getUrl( 'payfast/redirect/success', array( '_secure' => true ) );
+    }
+
+    /**
+     * getPaidCancelUrl
+     */
+    public function getPaidCancelUrl()
+    {
+        return $this->_urlBuilder->getUrl( 'payfast/redirect/cancel', array( '_secure' => true ) );
+    }
+    /**
+     * getPaidNotifyUrl
+     */
+    public function getPaidNotifyUrl()
+    {
+        return $this->_urlBuilder->getUrl( 'payfast/notify', array( '_secure' => true ) );
+    }
 
     /**
      * Check whether method available for checkout or not

@@ -66,6 +66,7 @@
             <argument name="handler" xsi:type="object">PayfastPayfastGatewayResponseHandlerComposite</argument>
             <argument name="transferFactory" xsi:type="object">Payfast\Payfast\Gateway\Http\TransferFactory</argument>
             <argument name="client" xsi:type="object">Payfast\Payfast\Gateway\Http\Client\ClientMock</argument>
+            <argument name="validator" xsi:type="object">Payfast\Payfast\Gateway\Validator\ResponseCodeValidator</argument>
         </arguments>
     </virtualType>
 
@@ -148,7 +149,7 @@
         </arguments>
     </virtualType>
 
-    <type name="Payfast\Payfast\Block\Info">
+    <type name="Payfast\Payfast\Block\Payment\Info">
         <arguments>
             <argument name="config" xsi:type="object">PayfastPayfastConfig</argument>
         </arguments>

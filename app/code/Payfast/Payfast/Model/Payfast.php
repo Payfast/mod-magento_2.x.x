@@ -166,10 +166,9 @@ class Payfast extends \Magento\Payment\Model\Method\AbstractMethod
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Payment\Model\Method\Logger $logger
-     * @param \Payfast\Payfast\Model\ConfigFactory $configFactory
+     * @param ConfigFactory $configFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\UrlInterface $urlBuilder
-     * @param \Payfast\Payfast\Model\CartFactory $cartFactory
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Framework\Exception\LocalizedExceptionFactory $exception
      * @param \Magento\Sales\Api\TransactionRepositoryInterface $transactionRepository
