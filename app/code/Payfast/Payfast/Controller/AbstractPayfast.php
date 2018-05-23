@@ -94,6 +94,9 @@ abstract class AbstractPayfast extends AppAction implements RedirectLoginInterfa
     /** @var \Magento\Framework\View\Result\PageFactory  */
     protected $_pageFactory;
 
+    /** @var \Magento\Sales\Model\ResourceModel\Order\Payment\Transaction  $salesTransactionResourceModel*/
+    private $salesTransactionResourceModel;
+
     /**
      * @var \Magento\Framework\DB\TransactionFactory
      */
@@ -130,7 +133,9 @@ abstract class AbstractPayfast extends AppAction implements RedirectLoginInterfa
         \Magento\Framework\DB\TransactionFactory $transactionFactory,
         \Payfast\Payfast\Model\Payfast $paymentMethod,
         OrderSender $orderSender,
-        InvoiceSender $invoiceSender
+        InvoiceSender $invoiceSender,
+        \Magento\Sales\Model\ResourceModel\Order\Payment\Transaction $salesTransactionResourceModel
+
     )
     {
         $pre = __METHOD__ . " : ";
@@ -150,6 +155,7 @@ abstract class AbstractPayfast extends AppAction implements RedirectLoginInterfa
         $this->_paymentMethod = $paymentMethod;
         $this->_orderSender = $orderSender;
         $this->_invoiceSender = $invoiceSender;
+        $this->salesTransactionResourceModel = $salesTransactionResourceModel;
 
         parent::__construct( $context );
 

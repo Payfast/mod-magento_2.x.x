@@ -1,11 +1,9 @@
-<?php
+<?php namespace Payfast\Payfast\Controller\Notify;
 /**
  * Copyright (c) 2008 PayFast (Pty) Ltd
  * You (being anyone who is not PayFast (Pty) Ltd) may download and use this plugin / code in your own website in conjunction with a registered and active PayFast account. If your PayFast account is terminated for any reason, you may not use this plugin / code or part thereof.
  * Except as expressly indicated in this licence, you may not use, copy, modify or distribute this plugin / code or part thereof in any way.
  */
-
-namespace Payfast\Payfast\Controller\Notify;
 
 use Magento\Framework\Exception\LocalizedException;
 use Payfast\Payfast\Model\Config AS PayFastConfig;
@@ -141,8 +139,8 @@ class Index extends \Payfast\Payfast\Controller\AbstractPayfast
         		$payment->setAdditionalInformation( "amount_fee", $pfData['amount_fee'] );
                 $payment->registerCaptureNotification( $pfData['amount_gross'], true);
                 $payment->setLastTransId($pfData['pf_payment_id']);
-                $payment->save();
 
+                $this->salesTransactionResourceModel->save($payment);
                 // Save invoice
                 $this->saveInvoice();
 
