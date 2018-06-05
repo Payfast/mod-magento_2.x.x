@@ -58,15 +58,15 @@ abstract class AbstractPayfast extends AppAction implements RedirectLoginInterfa
     /**
      * @var \Magento\Customer\Model\Session
      */
-    protected $_customerSession;
+    protected $customerSession;
 
-    /** @var \Magento\Checkout\Model\Session $_checkoutSession */
-    protected $_checkoutSession;
+    /** @var \Magento\Checkout\Model\Session $checkoutSession */
+    protected $checkoutSession;
 
     /**
      * @var \Magento\Sales\Model\OrderFactory
      */
-    protected $_orderFactory;
+    protected $orderFactory;
 
     /**
      * @var \Magento\Framework\Session\Generic
@@ -76,7 +76,7 @@ abstract class AbstractPayfast extends AppAction implements RedirectLoginInterfa
     /**
      * @var \Magento\Framework\Url\Helper
      */
-    protected $_urlHelper;
+    protected $urlHelper;
 
     /**
      * @var \Magento\Sales\Model\ResourceModel\Order $orderResourceModel
@@ -95,16 +95,21 @@ abstract class AbstractPayfast extends AppAction implements RedirectLoginInterfa
     protected $_pageFactory;
 
     /** @var \Magento\Sales\Model\ResourceModel\Order\Payment\Transaction  $salesTransactionResourceModel*/
-    private $salesTransactionResourceModel;
+    protected $salesTransactionResourceModel;
 
     /**
      * @var \Magento\Framework\DB\TransactionFactory
      */
-    protected $_transactionFactory;
+    protected $transactionFactory;
 
-    /** @var \Payfast\Payfast\Model\Payfast $_paymentMethod*/
-    protected $_paymentMethod;
+    /** @var \Payfast\Payfast\Model\Payfast $paymentMethod*/
+    protected $paymentMethod;
 
+    protected $pageFactory;
+
+    protected $orderSender;
+
+    protected $invoiceSender;
     /**
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Framework\View\Result\PageFactory $pageFactory
@@ -144,17 +149,17 @@ abstract class AbstractPayfast extends AppAction implements RedirectLoginInterfa
 
         $this->_logger->debug( $pre . 'bof' );
 
-        $this->_customerSession = $customerSession;
-        $this->_checkoutSession = $checkoutSession;
-        $this->_orderFactory = $orderFactory;
+        $this->customerSession = $customerSession;
+        $this->checkoutSession = $checkoutSession;
+        $this->orderFactory = $orderFactory;
         $this->payfastSession = $payfastSession;
-        $this->_urlHelper = $urlHelper;
+        $this->urlHelper = $urlHelper;
         $this->orderResourceModel = $orderResourceModel;
         $this->pageFactory = $pageFactory;
-        $this->_transactionFactory = $transactionFactory;
-        $this->_paymentMethod = $paymentMethod;
-        $this->_orderSender = $orderSender;
-        $this->_invoiceSender = $invoiceSender;
+        $this->transactionFactory = $transactionFactory;
+        $this->paymentMethod = $paymentMethod;
+        $this->orderSender = $orderSender;
+        $this->invoiceSender = $invoiceSender;
         $this->salesTransactionResourceModel = $salesTransactionResourceModel;
 
         parent::__construct( $context );
@@ -180,7 +185,7 @@ abstract class AbstractPayfast extends AppAction implements RedirectLoginInterfa
      */
     public function getConfigData( $field)
     {
-        return $this->_paymentMethod->getConfigData($field);
+        return $this->_config->getValue($field);
     }
 
     /**
@@ -195,9 +200,9 @@ abstract class AbstractPayfast extends AppAction implements RedirectLoginInterfa
         $pre = __METHOD__ . " : ";
         $this->_logger->debug($pre . 'bof');
 
-        $this->_checkoutSession->loadCustomerQuote();
+        $this->checkoutSession->loadCustomerQuote();
 
-        $this->_order = $this->_checkoutSession->getLastRealOrder();
+        $this->_order = $this->checkoutSession->getLastRealOrder();
 
         if ( !$this->_order->getId())
         {
@@ -220,16 +225,14 @@ abstract class AbstractPayfast extends AppAction implements RedirectLoginInterfa
 
         if ( $this->_order->getQuoteId() )
         {
-            $this->_checkoutSession->setPayfastQuoteId( $this->_checkoutSession->getQuoteId() );
-            $this->_checkoutSession->setPayfastSuccessQuoteId( $this->_checkoutSession->getLastSuccessQuoteId() );
-            $this->_checkoutSession->setPayfastRealOrderId( $this->_checkoutSession->getLastRealOrderId() );
-            $this->_checkoutSession->getQuote()->setIsActive( false )->save();
-            //$this->_checkoutSession->clear();
+            $this->checkoutSession->setPayfastQuoteId( $this->checkoutSession->getQuoteId() );
+            $this->checkoutSession->setPayfastSuccessQuoteId( $this->checkoutSession->getLastSuccessQuoteId() );
+            $this->checkoutSession->setPayfastRealOrderId( $this->checkoutSession->getLastRealOrderId() );
+            $this->checkoutSession->getQuote()->setIsActive( false )->save();
         }
 
         $this->_logger->debug($pre . 'eof');
 
-        //$this->_checkout = $this->_checkoutTypes[$this->_checkoutType];
     }
 
     /**
@@ -249,7 +252,7 @@ abstract class AbstractPayfast extends AppAction implements RedirectLoginInterfa
      */
     protected function _getCheckoutSession()
     {
-        return $this->_checkoutSession;
+        return $this->checkoutSession;
     }
 
     /**
@@ -311,9 +314,9 @@ abstract class AbstractPayfast extends AppAction implements RedirectLoginInterfa
     public function redirectLogin()
     {
         $this->_actionFlag->set( '', 'no-dispatch', true );
-        $this->_customerSession->setBeforeAuthUrl( $this->_redirect->getRefererUrl() );
+        $this->customerSession->setBeforeAuthUrl( $this->_redirect->getRefererUrl() );
         $this->getResponse()->setRedirect(
-            $this->_urlHelper->addRequestParam( $this->orderResourceModel->getLoginUrl(), [ 'context' => 'checkout' ] )
+            $this->urlHelper->addRequestParam( $this->orderResourceModel->getLoginUrl(), [ 'context' => 'checkout' ] )
         );
     }
 

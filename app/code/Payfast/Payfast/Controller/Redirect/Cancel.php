@@ -31,7 +31,7 @@ class Cancel extends \Payfast\Payfast\Controller\AbstractPayfast
         try
         {
             // Get the user session
-            $this->_order = $this->_checkoutSession->getLastRealOrder();
+            $this->_order = $this->checkoutSession->getLastRealOrder();
 
             $this->messageManager->addNoticeMessage('You have successfully canceled the order using PayFast Checkout.');
 
@@ -40,7 +40,7 @@ class Cancel extends \Payfast\Payfast\Controller\AbstractPayfast
                 $this->_order->registerCancellation( 'Cancelled by user from ' . $this->_configMethod )->save();
             }
 
-            $this->_checkoutSession->restoreQuote();
+            $this->checkoutSession->restoreQuote();
 
             $this->_redirect('checkout/cart');
 

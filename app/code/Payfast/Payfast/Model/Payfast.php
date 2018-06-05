@@ -18,7 +18,8 @@ use Magento\Quote\Model\Quote;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Payfast extends \Magento\Payment\Model\Method\AbstractMethod
+//class Payfast extends \Magento\Payment\Model\Method\AbstractMethod
+class Payfast
 {
     /**
      * @var string
@@ -196,7 +197,7 @@ class Payfast extends \Magento\Payment\Model\Method\AbstractMethod
                                  \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
                                  array $data = [ ] )
     {
-        parent::__construct( $context, $registry, $extensionFactory, $customAttributeFactory, $paymentData, $scopeConfig, $logger, $resource, $resourceCollection, $data );
+        //parent::__construct( $context, $registry, $extensionFactory, $customAttributeFactory, $paymentData, $scopeConfig, $logger, $resource, $resourceCollection, $data );
         $this->_storeManager = $storeManager;
         $this->_urlBuilder = $urlBuilder;
         $this->_checkoutSession = $checkoutSession;
@@ -210,7 +211,7 @@ class Payfast extends \Magento\Payment\Model\Method\AbstractMethod
 
         if (! defined('PF_DEBUG'))
         {
-            define('PF_DEBUG', $this->getConfigData('debug'));
+            define('PF_DEBUG', $this->_config->getValue('debug'));
         }
 
     }
@@ -282,7 +283,7 @@ class Payfast extends \Magento\Payment\Model\Method\AbstractMethod
         $pre = __METHOD__ . " : ";
         pflog( $pre . 'bof' );
 
-        $storeName = $this->_scopeConfig->getValue(
+        $storeName = $this->_config->getValue(
             'general/store_information/name',
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
@@ -305,13 +306,13 @@ class Payfast extends \Magento\Payment\Model\Method\AbstractMethod
 
         $description = '';
 
-        $this->_logger->debug($pre . 'serverMode : '. $this->getConfigData( 'server' ));
+        pflog($pre . 'serverMode : '. $this->_config->getValue( 'server' ));
 
         // If NOT test mode, use normal credentials
-        if( $this->getConfigData( 'server' ) == 'live' )
+        if( $this->_config->getValue( 'server' ) == 'live' )
         {
-            $merchantId = $this->getConfigData( 'merchant_id' );
-            $merchantKey = $this->getConfigData( 'merchant_key' );
+            $merchantId = $this->_config->getValue( 'merchant_id' );
+            $merchantKey = $this->_config->getValue( 'merchant_key' );
         }
         // If test mode, use generic sandbox credentials
         else
@@ -360,10 +361,10 @@ class Payfast extends \Magento\Payment\Model\Method\AbstractMethod
             }
         }
 
-        $passPhrase = $this->getConfigData('passphrase');
+        $passPhrase = $this->_config->getValue('passphrase');
         $pfOutput = substr( $pfOutput, 0, -1 );
 
-        if ( !empty( $passPhrase ) && $this->getConfigData('server') !== 'test' )
+        if ( !empty( $passPhrase ) && $this->_config->getValue('server') !== 'test' )
         {
             $pfOutput = $pfOutput."&passphrase=".urlencode( $passPhrase );
         }
@@ -375,7 +376,6 @@ class Payfast extends \Magento\Payment\Model\Method\AbstractMethod
         $data['signature'] = $pfSignature;
         $data['user_agent'] = 'Magento ' . $this->getAppVersion();
         pflog( $pre . 'data is :'. print_r( $data, true ) );
-        $this->logger->debug( $data );
 
         return( $data );
     }
@@ -397,7 +397,7 @@ class Payfast extends \Magento\Payment\Model\Method\AbstractMethod
      */
     public function getTotalAmount( $order )
     {
-        if( $this->getConfigData( 'use_store_currency' ) )
+        if( $this->_config->getValue( 'use_store_currency' ) )
             $price = $this->getNumberFormat( $order->getGrandTotal() );
         else
             $price = $this->getNumberFormat( $order->getBaseGrandTotal() );
@@ -502,7 +502,7 @@ class Payfast extends \Magento\Payment\Model\Method\AbstractMethod
     public function getPayFastUrl()
     {
 
-        return( 'https://'. $this->getPayfastHost( $this->getConfigData('server') ) . '/eng/process' );
+        return( 'https://'. $this->getPayfastHost( $this->_config->getValue('server') ) . '/eng/process' );
     }
 
     /**

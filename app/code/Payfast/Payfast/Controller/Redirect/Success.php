@@ -7,7 +7,6 @@
 namespace Payfast\Payfast\Controller\Redirect;
 
 
-
 /**
  * Responsible for loading page content.
  *
@@ -32,20 +31,9 @@ class Success extends \Payfast\Payfast\Controller\AbstractPayfast
         try
         {
 
-
-            // ToDo update the order.
             $this->_redirect('checkout/onepage/success');
 
-        }
-        catch ( \Magento\Framework\Exception\LocalizedException $e )
-        {
-            $this->_logger->error( $pre . $e->getMessage());
-
-            $this->messageManager->addExceptionMessage( $e, $e->getMessage() );
-            $this->_redirect( 'checkout/cart' );
-        }
-        catch ( \Exception $e )
-        {
+        } catch ( \Exception $e ) {
             $this->_logger->error( $pre . $e->getMessage());
             $this->messageManager->addExceptionMessage( $e, __( 'We can\'t start PayFast Checkout.' ) );
             $this->_redirect( 'checkout/cart' );

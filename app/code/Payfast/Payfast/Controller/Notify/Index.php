@@ -30,7 +30,7 @@ class Index extends \Payfast\Payfast\Controller\AbstractPayfast
         $serverMode = $this->getConfigData('server');
         $pfParamString = '';
 
-        $pfHost = $this->_paymentMethod->getPayfastHost( $serverMode );
+        $pfHost = $this->paymentMethod->getPayfastHost( $serverMode );
 
         pflog( ' PayFast ITN call received' );
 
@@ -89,15 +89,12 @@ class Index extends \Payfast\Payfast\Controller\AbstractPayfast
             // Load order
     		$orderId = $pfData['m_payment_id'];
 
-            $this->_order = $this->_orderFactory->create()->loadByIncrementId($orderId);
-
-    		$this->storeId = $this->_order->getStoreId();
-
+            $this->_order = $this->orderFactory->create()->loadByIncrementId($orderId);
 
             pflog( 'order status is : '. $this->_order->getStatus());
 
             // Check order is in "pending payment" state
-            if( $this->_order->getStatus() !== \Magento\Sales\Model\Order::STATE_PENDING_PAYMENT )
+            if( $this->_order->getState() !== \Magento\Sales\Model\Order::STATE_PENDING_PAYMENT )
             {
                 $pfError = true;
                 $pfErrMsg = PF_ERR_ORDER_PROCESSED;
@@ -105,13 +102,11 @@ class Index extends \Payfast\Payfast\Controller\AbstractPayfast
         }
         
         //// Verify data received
-        if( !$pfError )
+        if( ! $pfError )
         {
             pflog( 'Verify data received' );
         
-//            $pfValid = pfValidData( $pfHost, $pfParamString );
-            $pfValid = true;
-            if( !$pfValid )
+            if( ! pfValidData( $pfHost, $pfParamString ) )
             {
                 $pfError = true;
                 $pfErrMsg = PF_ERR_BAD_ACCESS;
@@ -126,21 +121,7 @@ class Index extends \Payfast\Payfast\Controller\AbstractPayfast
             // Successful
             if( $pfData['payment_status'] == "COMPLETE" )
             {
-                pflog( 'Order complete' );
-                $this->_logger->debug($pre. 'canSendNewEmailFlag is ' . boolval($this->_order->getCanSendNewEmailFlag()));
-
-                // Update order additional payment information
-                /** @var  \Magento\Sales\Model\Order\Payment $payment  */
-                $payment = $this->_order->getPayment();
-        		$payment->setAdditionalInformation( "payment_status", $pfData['payment_status'] );
-        		$payment->setAdditionalInformation( "m_payment_id", $pfData['m_payment_id'] );
-                $payment->setAdditionalInformation( "pf_payment_id", $pfData['pf_payment_id'] );
-                $payment->setAdditionalInformation( "email_address", $pfData['email_address'] );
-        		$payment->setAdditionalInformation( "amount_fee", $pfData['amount_fee'] );
-                $payment->registerCaptureNotification( $pfData['amount_gross'], true);
-                $payment->setLastTransId($pfData['pf_payment_id']);
-
-                $this->salesTransactionResourceModel->save($payment);
+                $this->setPaymentAdditionalInformation($pfData);
                 // Save invoice
                 $this->saveInvoice();
 
@@ -158,20 +139,22 @@ class Index extends \Payfast\Payfast\Controller\AbstractPayfast
     /**
 	 * saveInvoice
      *
+     * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
+     *
      */
-	protected function saveInvoice()
+	protected function saveInvoice(): void
     {
-        pflog( 'Saving invoice' );
+        pflog(__METHOD__.' : bof');
 
         try {
-            // Check for mail msgss
+
             $invoice = $this->_order->prepareInvoice();
 
             $invoice->register()->capture();
 
             /** @var \Magento\Framework\DB\Transaction $transaction */
-            $transaction = $this->_transactionFactory->create();
+            $transaction = $this->transactionFactory->create();
             $transaction->addObject($invoice)
                 ->addObject($invoice->getOrder())
                 ->save();
@@ -182,13 +165,13 @@ class Index extends \Payfast\Payfast\Controller\AbstractPayfast
 
             if ($this->_config->getValue(PayFastConfig::KEY_SEND_CONFIRMATION_EMAIL)) {
                 pflog( 'before sending order email, canSendNewEmailFlag is ' . boolval($this->_order->getCanSendNewEmailFlag()));
-                $this->_orderSender->send($this->_order);
+                $this->orderSender->send($this->_order);
                 pflog('after sending order email');
             }
             
             if ($this->_config->getValue(PayFastConfig::KEY_SEND_INVOICE_EMAIL)) {
                 pflog( 'before sending invoice email is ' . boolval($this->_order->getCanSendNewEmailFlag()));
-                $this->_invoiceSender->send($invoice);
+                $this->invoiceSender->send($invoice);
                 pflog( 'after sending ' . boolval($invoice->getIncrementId()));
             }
 
@@ -202,5 +185,38 @@ class Index extends \Payfast\Payfast\Controller\AbstractPayfast
             throw $e;
         }
 
+        pflog(__METHOD__.' : eof');
+    }
+
+    /**
+     * @param $pfData
+     * @throws LocalizedException
+     * @throws \Magento\Framework\Exception\AlreadyExistsException
+     */
+    private function setPaymentAdditionalInformation($pfData): void
+    {
+        pflog(__METHOD__.' : bof');
+        pflog('Order complete');
+
+        try {
+            // Update order additional payment information
+            /** @var  \Magento\Sales\Model\Order\Payment $payment */
+            $payment = $this->_order->getPayment();
+            $payment->setAdditionalInformation("payment_status", $pfData['payment_status']);
+            $payment->setAdditionalInformation("m_payment_id", $pfData['m_payment_id']);
+            $payment->setAdditionalInformation("pf_payment_id", $pfData['pf_payment_id']);
+            $payment->setAdditionalInformation("email_address", $pfData['email_address']);
+            $payment->setAdditionalInformation("amount_fee", $pfData['amount_fee']);
+            $payment->registerCaptureNotification($pfData['amount_gross'], true);
+
+            $this->_order->setPayment($payment);
+
+        } catch (LocalizedException $e) {
+            pflog(__METHOD__ . ' localizedException caught and will be re thrown. ');
+            pflog(__METHOD__ . $e->getMessage());
+            throw $e;
+        }
+
+        pflog(__METHOD__.' : eof');
     }
 }

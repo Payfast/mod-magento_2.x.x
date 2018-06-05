@@ -1,13 +1,11 @@
-<?php
+<?php namespace Payfast\Payfast\Gateway\Request;
 /**
- * Created by PhpStorm.
- * User: lefu
- * Date: 2018/05/07
- * Time: 8:48 PM
+ * Copyright (c) 2008 PayFast (Pty) Ltd
+ * You (being anyone who is not PayFast (Pty) Ltd) may download and use this plugin / code in your own website in conjunction with a registered and active PayFast account. If your PayFast account is terminated for any reason, you may not use this plugin / code or part thereof.
+ * Except as expressly indicated in this licence, you may not use, copy, modify or distribute this plugin / code or part thereof in any way.
  */
 
-namespace Payfast\Payfast\Gateway\Request;
-
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Payment\Gateway\ConfigInterface;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\Payment\Gateway\Request\BuilderInterface;
@@ -27,14 +25,14 @@ class AuthorizationRequest implements BuilderInterface
 
     /** @var LoggerInterface */
     private $logger;
+
     /**
      * @param ConfigInterface $config
+     * @param LoggerInterface $logger
+     * @param Config $payfastConfig
      */
-    public function __construct(
-        ConfigInterface $config,
-        LoggerInterface $logger,
-        Config $payfastConfig
-    ) {
+    public function __construct(ConfigInterface $config, LoggerInterface $logger, Config $payfastConfig)
+    {
         $this->config = $config;
 
         $this->logger = $logger;
@@ -43,10 +41,12 @@ class AuthorizationRequest implements BuilderInterface
     }
 
     /**
+     * if this was a cc payment then we would append cc fields in and dispatch it.
      * Builds ENV request
      *
      * @param array $buildSubject
      * @return array
+     * @throws \Exception
      */
     public function build(array $buildSubject)
     {
@@ -59,12 +59,16 @@ class AuthorizationRequest implements BuilderInterface
         ) {
             throw new \InvalidArgumentException('Payment data object should be provided');
         }
-
-        /** @var PaymentDataObjectInterface $payment */
-        $payment = $buildSubject['payment'];
-        $order = $payment->getOrder();
-        $address = $order->getShippingAddress();
         try {
+
+            /** @var PaymentDataObjectInterface $payment */
+            $payment = $buildSubject['payment'];
+
+            $order = $payment->getOrder();
+
+            $address = $order->getShippingAddress();
+
+
 
             $merchantId = $this->config->getValue( 'merchant_id', $order->getStoreId() );
             $merchantKey = $this->config->getValue( 'merchant_key', $order->getStoreId() );
@@ -91,36 +95,39 @@ class AuthorizationRequest implements BuilderInterface
 
 
             ];
+            $pfOutput = '';
+            // Create output string
+            foreach( $data as $key => $val )
+            {
+                if (!empty( $val ))
+                {
+                    $pfOutput .= $key .'='. urlencode( $val ) .'&';
+                }
+            }
+
+            $passPhrase = $this->config->getValue('passphrase', $order->getStoreId());
+            $pfOutput = substr( $pfOutput, 0, -1 );
+
+            if ( !empty( $passPhrase ) && $this->config->getValue('server', $order->getStoreId()) !== 'test' )
+            {
+                $pfOutput = $pfOutput."&passphrase=".urlencode( $passPhrase );
+            }
+
+            $this->logger->debug( $pre . 'pfOutput for signature is : '. $pfOutput );
+
+            $pfSignature = md5( $pfOutput );
+
+            $data['signature'] = $pfSignature;
+            $data['user_agent'] = 'Magento ' . $this->getAppVersion();
+
+            $this->logger->debug( $pre . 'generated  signature : '. $data['signature']);
+
         } catch (\Exception $exception) {
             $this->logger->critical($pre. $exception->getTraceAsString());
             throw $exception;
         }
-        $pfOutput = '';
-        // Create output string
-        foreach( $data as $key => $val )
-        {
-            if (!empty( $val ))
-            {
-                $pfOutput .= $key .'='. urlencode( $val ) .'&';
-            }
-        }
 
-        $passPhrase = $this->config->getValue('passphrase', $order->getStoreId());
-        $pfOutput = substr( $pfOutput, 0, -1 );
-
-        if ( !empty( $passPhrase ) && $this->config->getValue('server', $order->getStoreId()) !== 'test' )
-        {
-            $pfOutput = $pfOutput."&passphrase=".urlencode( $passPhrase );
-        }
-
-        $this->logger->debug( $pre . 'pfOutput for signature is : '. $pfOutput );
-
-        $pfSignature = md5( $pfOutput );
-
-        $data['signature'] = $pfSignature;
-        $data['user_agent'] = 'Magento ' . $this->getAppVersion();
-
-        $this->logger->debug( $pre . 'response to return is :', $data);
+        $this->logger->debug($pre. 'eof');
 
         return $data;
     }
