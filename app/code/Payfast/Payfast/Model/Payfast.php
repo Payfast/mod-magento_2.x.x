@@ -357,7 +357,7 @@ class Payfast
         {
             if (!empty( $val ))
             {
-                $pfOutput .= $key .'='. urlencode( $val ) .'&';
+                $pfOutput .= $key .'='. urlencode( trim( $val ) ) .'&';
             }
         }
 
