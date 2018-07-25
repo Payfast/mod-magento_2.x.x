@@ -20,10 +20,15 @@ In order to use PayFast with Magento 2.2.x you will need a working Magento 2.2.x
 2. Copy the PayFast app folder to your root Magento folder.
     This will not override any files on your system.
 3. You will now need to run the following commands in the given order:
+
     3.1 php ./bin/magento module:enable PayFast_Payfast
+    
     3.2 php ./bin/magento setup:di:compile  
+    
     3.3 php ./bin/magento setup:static-content:deploy 
+    
     3.4 php ./bin/magento cache:clean
+    
 4. Log into the admin panel and navigate to 'Stores'>'Configuration'>'Sales'>'Payment Method' and click on Payfast
 5. Enable the module, as well as debugging. To test in sandbox insert 'test' in the 'server' field and use the following credentials:
     Merchant ID: 10000100
