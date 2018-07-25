@@ -31,10 +31,15 @@ In order to use PayFast with Magento 2.2.x you will need a working Magento 2.2.x
     
 4. Log into the admin panel and navigate to 'Stores'>'Configuration'>'Sales'>'Payment Method' and click on Payfast
 5. Enable the module, as well as debugging. To test in sandbox insert 'test' in the 'server' field and use the following credentials:
+
     Merchant ID: 10000100
+    
     Merchant Key: 46f0cd694581a
-   Leave the passphrase blank and setup the other options as required.
-   configure sending of emails 
+    
+    Leave the passphrase blank and setup the other options as required.
+        
+   ##NB: configure sending of emails by default magento source code does not allow sending of emails when a payment module does a redirect.
+   
 6. Click 'Save Config', you are now ready to test in sandbox, click 'Save Config'.
 
 7. Once you are ready to go live, insert 'live' into the 'server' field and input your PayFast credentials. Set debug log to 'No', and the other options as required.
