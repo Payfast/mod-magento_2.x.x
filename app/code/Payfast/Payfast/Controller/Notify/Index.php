@@ -35,14 +35,14 @@ class Index extends \Payfast\Payfast\Controller\AbstractPayfast
         pflog( ' PayFast ITN call received' );
 
         pflog( 'Server = '. $pfHost );
-        
+
         //// Notify PayFast that information has been received
         if( !$pfError )
         {
             header( 'HTTP/1.0 200 OK' );
             flush();
         }
-        
+
         //// Get data sent by PayFast
         if( !$pfError )
         {
@@ -55,12 +55,12 @@ class Index extends \Payfast\Payfast\Controller\AbstractPayfast
                 $pfErrMsg = PF_ERR_BAD_ACCESS;
             }
         }
-        
+
         //// Verify security signature
         if( !$pfError )
         {
             pflog( 'Verify security signature' );
-        
+
             // If signature different, log for debugging
             if ( !pfValidSignature( $pfData, $pfParamString, $this->getConfigData( 'passphrase' ), $this->getConfigData( 'server' ) ) )
             {
@@ -68,24 +68,24 @@ class Index extends \Payfast\Payfast\Controller\AbstractPayfast
                 $pfErrMsg = PF_ERR_INVALID_SIGNATURE;
             }
         }
-        
+
         //// Verify source IP (If not in debug mode)
         if( !$pfError && !defined( 'PF_DEBUG' ) )
         {
             pflog( 'Verify source IP' );
-        
+
             if( !pfValidIP( $_SERVER['REMOTE_ADDR'] , $serverMode ) )
             {
                 $pfError = true;
                 $pfErrMsg = PF_ERR_BAD_SOURCE_IP;
             }
         }
-        
+
         //// Get internal order and verify it hasn't already been processed
         if( !$pfError )
         {
             pflog( "Check order hasn't been processed" );
-            
+
             // Load order
     		$orderId = $pfData['m_payment_id'];
 
@@ -100,12 +100,12 @@ class Index extends \Payfast\Payfast\Controller\AbstractPayfast
                 $pfErrMsg = PF_ERR_ORDER_PROCESSED;
             }
         }
-        
+
         //// Verify data received
         if( ! $pfError )
         {
             pflog( 'Verify data received' );
-        
+
             if( ! pfValidData( $pfHost, $pfParamString ) )
             {
                 $pfError = true;
@@ -117,7 +117,7 @@ class Index extends \Payfast\Payfast\Controller\AbstractPayfast
         if( !$pfError )
         {
             pflog( 'Check status and update order' );
-            
+
             // Successful
             if( $pfData['payment_status'] == "COMPLETE" )
             {
@@ -127,7 +127,7 @@ class Index extends \Payfast\Payfast\Controller\AbstractPayfast
 
             }
         }
-        
+
         // If an error occurred
         if( $pfError )
         {
@@ -151,14 +151,6 @@ class Index extends \Payfast\Payfast\Controller\AbstractPayfast
 
             $invoice = $this->_order->prepareInvoice();
 
-            $invoice->register()->capture();
-
-            /** @var \Magento\Framework\DB\Transaction $transaction */
-            $transaction = $this->transactionFactory->create();
-            $transaction->addObject($invoice)
-                ->addObject($invoice->getOrder())
-                ->save();
-
             $this->_order->addStatusHistoryComment( __( 'Notified customer about invoice #%1.', $invoice->getIncrementId() ) );
 
             $this->orderResourceModel->save($this->_order);
@@ -168,7 +160,7 @@ class Index extends \Payfast\Payfast\Controller\AbstractPayfast
                 $this->orderSender->send($this->_order);
                 pflog('after sending order email');
             }
-            
+
             if ($this->_config->getValue(PayFastConfig::KEY_SEND_INVOICE_EMAIL)) {
                 pflog( 'before sending invoice email is ' . boolval($this->_order->getCanSendNewEmailFlag()));
                 $this->invoiceSender->send($invoice);
