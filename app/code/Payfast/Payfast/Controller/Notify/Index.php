@@ -151,19 +151,34 @@ class Index extends \Payfast\Payfast\Controller\AbstractPayfast
 
             $invoice = $this->_order->prepareInvoice();
 
-            $this->_order->addStatusHistoryComment( __( 'Notified customer about invoice #%1.', $invoice->getIncrementId() ) );
+            $invoice->register()->capture();
+
+            /** @var \Magento\Framework\DB\Transaction $transaction */
+            $transaction = $this->transactionFactory->create();
+            $transaction
+                ->addObject($invoice->getOrder());
+            $transaction->save();
 
             $this->orderResourceModel->save($this->_order);
+
 
             if ($this->_config->getValue(PayFastConfig::KEY_SEND_CONFIRMATION_EMAIL)) {
                 pflog( 'before sending order email, canSendNewEmailFlag is ' . boolval($this->_order->getCanSendNewEmailFlag()));
                 $this->orderSender->send($this->_order);
+
                 pflog('after sending order email');
             }
 
             if ($this->_config->getValue(PayFastConfig::KEY_SEND_INVOICE_EMAIL)) {
+
                 pflog( 'before sending invoice email is ' . boolval($this->_order->getCanSendNewEmailFlag()));
-                $this->invoiceSender->send($invoice);
+                foreach ($this->_order->getInvoiceCollection() as $invoice) {
+                    pflog('sending invoice #'. $invoice->getId() );
+                    if ($invoice->getId()) {
+                        $this->invoiceSender->send($invoice);
+                    }
+                }
+
                 pflog( 'after sending ' . boolval($invoice->getIncrementId()));
             }
 
