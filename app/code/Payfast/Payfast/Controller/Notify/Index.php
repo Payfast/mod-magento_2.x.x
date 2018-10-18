@@ -200,7 +200,7 @@ class Index extends \Payfast\Payfast\Controller\AbstractPayfast
      * @throws LocalizedException
      * @throws \Magento\Framework\Exception\AlreadyExistsException
      */
-    private function setPaymentAdditionalInformation($pfData): void
+    private function setPaymentAdditionalInformation($pfData)
     {
         pflog(__METHOD__.' : bof');
         pflog('Order complete');
