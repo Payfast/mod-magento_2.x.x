@@ -143,7 +143,7 @@ class Index extends \Payfast\Payfast\Controller\AbstractPayfast
      * @throws \Magento\Framework\Exception\LocalizedException
      *
      */
-	protected function saveInvoice(): void
+	protected function saveInvoice()
     {
         pflog(__METHOD__.' : bof');
 
