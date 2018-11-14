@@ -12,7 +12,7 @@ class ItnHandler implements \Magento\Payment\Gateway\Response\HandlerInterface
     /**
      * @param \Psr\Log\LoggerInterface $logger
      */
-    public function __construct(\Psr\Log\LoggerInterface $logger )
+    public function __construct(\Psr\Log\LoggerInterface $logger)
     {
         $this->logger = $logger;
     }
@@ -25,23 +25,23 @@ class ItnHandler implements \Magento\Payment\Gateway\Response\HandlerInterface
      *
      * @return void
      */
-    public function handle( array $handlingSubject, array $response )
+    public function handle(array $handlingSubject, array $response)
     {
-        if (!isset($handlingSubject['payment'])
-                     || !$handlingSubject['payment'] instanceof PaymentDataObjectInterface
-          ) {
-                   throw new \InvalidArgumentException('Payment data object should be provided');
-          }
+        $pre = __METHOD__ . ' : ';
+        $this->logger->debug( $pre . 'bof' );
+        if (! isset( $handlingSubject['payment'] ) || ! $handlingSubject['payment'] instanceof PaymentDataObjectInterface) {
+            throw new \InvalidArgumentException( 'Payment data object should be provided' );
+        }
 
-          /** @var PaymentDataObjectInterface $paymentDO */
-          $paymentDO = $handlingSubject['payment'];
+        /** @var PaymentDataObjectInterface $paymentDO */
+        $paymentDO = $handlingSubject['payment'];
 
-          $payment = $paymentDO->getPayment();
+        $payment = $paymentDO->getPayment();
 
-          /** @var $payment \Magento\Sales\Model\Order\Payment */
-          $payment->setTransactionId($response[self::TXN_ID]);
-          $payment->setIsTransactionClosed(false);
-
+        /** @var $payment \Magento\Sales\Model\Order\Payment */
+        $payment->setTransactionId( $response[self::TXN_ID] );
+        $payment->setIsTransactionClosed( false );
+        $this->logger->debug( $pre . 'eof' );
 
     }
 }

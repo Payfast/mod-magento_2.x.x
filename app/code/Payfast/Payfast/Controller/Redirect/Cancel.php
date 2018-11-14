@@ -26,7 +26,7 @@ class Cancel extends \Payfast\Payfast\Controller\AbstractPayfast
     {
         $pre = __METHOD__ . " : ";
         $this->_logger->debug($pre . 'bof');
-        $page_object = $this->pageFactory->create();;
+        $page_object = $this->pageFactory->create();
 
         try
         {
@@ -37,7 +37,13 @@ class Cancel extends \Payfast\Payfast\Controller\AbstractPayfast
 
             if ($this->_order->getId() && $this->_order->getState() != \Magento\Sales\Model\Order::STATE_CANCELED)
             {
-                $this->_order->registerCancellation( 'Cancelled by user from ' . $this->_configMethod )->save();
+
+                pflog($pre . 'Can PayFast cancel this order? ' . json_encode($this->_order->canCancel()));
+                $this->_order->registerCancellation( 'Cancelled by user from ' . $this->_configMethod );
+
+                $this->orderResourceModel->save($this->_order);
+
+                pflog($pre . 'order status is now set to  cancel' );
             }
 
             $this->checkoutSession->restoreQuote();
